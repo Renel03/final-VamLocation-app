@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Test</title>
+        <link rel="stylesheet" href="{{ absolute_url(asset('dist/css/bootstrap.min.css')) }}"/>
+    </head>
+    <body>
+        {% set flashes = app.session.flashbag.all() %}
+        {% if flashes | length > 0 %}{% for type, messages in flashes %}{% for message in messages %}<div class="alert alert-{{type}}">{{ message }}</div>{% endfor %}{% endfor %}{% endif %}
+        <div class="row">
+            <div class="col-6 offset-3">
+                {{ form_start(form) }}
+                    {{ form_errors(form) }}
+                    <div>
+                        <button type="submit">Send</button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+        <script type="text/javascript" src="{{ absolute_url(asset('dist/js/bootstrap.min.js')) }}"></script>
+    </body>
+</html>

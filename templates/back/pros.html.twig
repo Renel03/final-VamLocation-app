@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Professionnels - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="wp">
+    <div class="title d-flex align-items-center">
+        <h1 class="flex-grow-1">Professionnels</h1>
+        <a href="{{ url('back_pros_add') }}" class="btn btn-primary float-right"><i class="fa fa-plus"></i> Ajouter</a>
+    </div>
+    <form class="form">
+        <table class="table table-striped mb-0">
+            <thead>
+                <tr>
+                    <th width="45px"></th>
+                    <th width="120px">{{ knp_pagination_sortable(pagination, '#', 'u.id') }}</th>
+                    <th>{{ knp_pagination_sortable(pagination, 'Nom complet', 'u.lastname') }}</th>
+                    <th>{{ knp_pagination_sortable(pagination, 'Entreprise', 'u.companyName') }}</th>
+                    <th>{{ knp_pagination_sortable(pagination, 'E-mail', 'u.email') }}</th>
+                    <th width="100px" class="text-center">Etat</th>
+                    <th width="45px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if pagination.getTotalItemCount() > 0 %}
+                {% for entity in pagination %}
+                <tr>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="del[]" value="{{ entity.id }}"/>
+                            <span></span>
+                        </label>
+                    </td>
+                    <td>#{{ entity.id }}</td>
+                    <td>{{ entity.lastname }} {{ entity.firstname }}</td>
+                    <td>{{ entity.companyName }}</td>
+                    <td>{{ entity.email }}</td>
+                    <td class="text-center">{% if entity.isActive %}<i class="fa fa-check-circle text-success"></i>{% else %}<i class="fa fa-check-circle text-danger"></i>{% endif %}</td>
+                    <td class="text-center"><a href="{{ url('back_pros_edit',{'id': entity.id}) }}"><i class="fa fa-edit"></i></a></td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="7">Aucun professionnel trouvé.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        <div class="navigation text-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+        <div class="pt-20">
+            <button type="submit" class="btn btn-primary" onClick="return confirm('Voulez-vous supprimer la sélection ?');"><i class="fa fa-trash"></i> Supprimer la sélection</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

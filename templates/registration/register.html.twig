@@ -1,0 +1,106 @@
+{% extends 'auth.html.twig' %}
+
+{% block title %}Inscription - AlloCar{% endblock %}
+
+{% block stylesheets %}
+<style type="text/css">
+    .is-pro-show{
+        display:none
+    }
+    .is-pro-show.active{
+        display:block
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<section class='section pt-80 pb-40'>
+    <div class='form-auth'>
+        <h1 class='title'><i class='fa fa-edit'></i> Inscription</h1>
+        {{ form_start(registrationForm, {'attr': {'class': 'form'}}) }}
+            {% if registrationForm.vars.valid == 0 %}
+            <div class="form-error">
+            {{ form_errors(registrationForm) }}
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+                {{ form_label(registrationForm.type) }}
+                {{ form_widget(registrationForm.type) }}
+                {% if registrationForm.type.vars.valid == 0 %}
+                <div class="form-error">
+                    {{ form_errors(registrationForm.type) }}
+                </div>
+                {% endif %}
+            </div>
+            <div class="form-group is-pro-show">
+                {{ form_label(registrationForm.companyName, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(registrationForm.companyName) }}
+                {% if registrationForm.companyName.vars.valid == 0 %}
+                <div class="form-error">
+                    {{ form_errors(registrationForm.companyName) }}
+                </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form_label(registrationForm.email) }}
+                {{ form_widget(registrationForm.email) }}
+                {% if registrationForm.email.vars.valid == 0 %}
+                <div class="form-error">
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form_label(registrationForm.plainPassword) }}
+                <div class="position-relative">
+                    {{ form_widget(registrationForm.plainPassword) }}
+                    <button type="button" class="show-password" data-id="#registration_form_plainPassword"><i class="fa fa-eye"></i></button>
+                </div>
+                {% if registrationForm.plainPassword.vars.valid == 0 %}
+                <div class="form-error">
+                    {{ form_errors(registrationForm.plainPassword) }}
+                </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label>
+                    {{ form_widget(registrationForm.agreeTerms) }}
+                    <span></span>
+                    J'ai lu et accepte <a href="{{ url('page', {'slug': 'conditions-generales-d-utilisation.html'}) }}">les conditions générales d'utilisation</a> et <a href="{{ url('page', {'slug': 'politique-de-confidentialite.html'}) }}">la politique de confidentialité</a>
+                </label>
+                {% if registrationForm.agreeTerms.vars.valid == 0 %}
+                <div class="form-error">
+                    {{ form_errors(registrationForm.agreeTerms) }}
+                </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary w-100">Créer mon compte</button>
+            </div>
+            <div class="text-center">
+                Vous avez déjà inscrit ? <br/><a href="{{ url('security_login') }}">Identifiez-vous</a>
+            </div>
+        {{ form_end(registrationForm) }}
+    </div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        jQuery(function(){
+            if($('#registration_form_type').val() == '1'){
+                $('.is-pro-show').addClass('active')
+            }else{
+                $('.is-pro-show').removeClass('active')
+            }
+            $(document).on('change', '#registration_form_type', function(){
+                if($(this).val() == '1'){
+                    $('.is-pro-show').addClass('active')
+                }else{
+                    $('.is-pro-show').removeClass('active')
+                }
+            });
+        });
+    </script>
+{% endblock %}

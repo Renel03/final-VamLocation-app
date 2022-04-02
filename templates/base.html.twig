@@ -1,0 +1,93 @@
+{% set route_name = app.request.get('_route') %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta name="robots" content="noindex,nofollow" />
+        <title>{% block title %}AlloCar{% endblock %}</title>
+        <link rel="stylesheet" href="{{ absolute_url(asset('dist/css/bootstrap.min.css')) }}"/>
+        <link rel="stylesheet" href="{{ absolute_url(asset('fontawesome/css/all.min.css')) }}"/>
+        <link rel="stylesheet" href="{{ absolute_url(asset('fonts/proxima/proxima.css')) }}"/>
+        <link rel="stylesheet" href="{{ absolute_url(asset('css/style.back.css')) }}"/>
+        {{ encore_entry_link_tags('app') }}
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body class="bg-gray">
+        <div id="wrapper">            
+            <header id="header">
+                <div class="logo">
+                    <a href="{{ url('back_index') }}">
+                        <img src="{{ absolute_url(asset('images/lecomparateurassurance.svg')) }}" alt=""/>
+                    </a>
+                </div>
+                <nav class="menu">
+                    <ul>
+                        <li><a href="{{ url('back_index') }}" {% if route_name starts with "back_index" %}class="active"{% endif %}>Paramètres</a></li>
+                        <li><a href="{{ url('back_pros') }}" {% if route_name starts with "back_pros" %}class="active"{% endif %}>Professionnels</a></li>
+                        <li><a href="{{ url('back_parts') }}" {% if route_name starts with "back_parts" %}class="active"{% endif %}>Particulières</a></li>
+                        <li><a href="{{ url('back_users') }}" {% if route_name starts with "back_users" %}class="active"{% endif %}>Utilisateurs</a></li>
+                        <li><a href="{{ url('back_posts') }}" {% if route_name starts with "back_posts" %}class="active"{% endif %}>Annonces</a></li>
+                        <li><a href="{{ url('back_demands') }}" {% if route_name starts with "back_demands" %}class="active"{% endif %}>Demandes</a></li>
+                        <li><a href="{{ url('back_offers') }}" {% if route_name starts with "back_offers" %}class="active"{% endif %}>Offres</a></li>
+                        <li><a href="{{ url('back_cars') }}" {% if route_name starts with "back_cars" %}class="active"{% endif %}>Voitures</a></li>
+                        <li><a href="{{ url('back_trademarks') }}" {% if route_name starts with "back_trademarks" %}class="active"{% endif %}>Marques</a></li>
+                        <li><a href="{{ url('back_models') }}" {% if route_name starts with "back_models" %}class="active"{% endif %}>Modèles</a></li>
+                        <li><a href="{{ url('back_versions') }}" {% if route_name starts with "back_versions" %}class="active"{% endif %}>Versions</a></li>
+                        <li><a href="{{ url('back_cities') }}" {% if route_name starts with "back_cities" %}class="active"{% endif %}>Villes</a></li>
+                        <li><a href="{{ url('back_conversations') }}" {% if route_name starts with "back_conversations" %}class="active"{% endif %}>Conversations</a></li>
+                        {# <li><a href="{{ url('back_messages') }}" {% if route_name starts with "back_messages" %}class="active"{% endif %}>Messages</a></li> #}
+                        <li><a href="{{ url('back_responses') }}" {% if route_name starts with "back_responses" %}class="active"{% endif %}>Réponses</a></li>
+                        <li><a href="{{ url('back_plans') }}" {% if route_name starts with "back_plans" %}class="active"{% endif %}>Plans</a></li>
+                        <li><a href="{{ url('back_subscriptions') }}" {% if route_name starts with "back_subscriptions" %}class="active"{% endif %}>Abonnements</a></li>
+                        <li><a href="{{ url('back_historics') }}" {% if route_name starts with "back_historics" %}class="active"{% endif %}>Historiques</a></li>
+                        <li><a href="{{ url('back_faqs') }}" {% if route_name starts with "back_faqs" %}class="active"{% endif %}>FAQ</a></li>
+                    </ul>
+                </nav>
+            </header>
+            <nav id="nav" class="d-flex align-items-center">
+                <a href="{{ url('page') }}" style="font-size:28px"><i class="fa fa-home"></i></a>
+                <span class="flex-grow-1"></span>
+                <div class="auth d-flex align-items-center">
+                    <ul>
+                        <li>
+                            <a href="" class='notify'>
+                                <i class='fa fa-bell'></i>
+                                <span class='nb'>0</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" class='mess'>
+                                <i class='fa fa-envelope'></i>
+                                <span class='nb'>0</span>
+                            </a>
+                        </li>
+                        <li class='_dropdown'>
+                            <button class='_dropdown-toggle user-avatar'>
+                                <img src="/images/avatar.jpg" alt="" />
+                            </button>
+                            <ul class='_dropdown-menu'>
+                                <li><a href="{{ url('accounts') }}">Mon profil</a></li>
+                                <li><a href="{{ url('accounts', {'slug': 'mes-demandes.html'}) }}">Mes demandes</a></li>
+                                <li><a href="{{ url('accounts', {'slug': 'mes-ventes.html'}) }}">Mes ventes</a></li>
+                                <li><a href="{{ url('security_logout') }}">Déconnexion</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <main id="main">
+                {% set flashes = app.session.flashbag.all() %}
+                {% if flashes | length > 0 %}{% for type, messages in flashes %}{% for message in messages %}<div class="alert alert-{{type}}">{{ message }}</div>{% endfor %}{% endfor %}{% endif %}
+                {% block body %}{% endblock %}
+            </main>
+        </div>
+    	<script type="text/javascript" src="{{ absolute_url(asset('js/jquery-3.3.1.min.js')) }}"></script>
+        <script type="text/javascript" src="{{ absolute_url(asset('dist/js/bootstrap.min.js')) }}"></script>
+        <script type="text/javascript" src="{{ absolute_url(asset('fontawesome/js/all.min.js')) }}"></script>
+        <script type="text/javascript" src="{{ absolute_url(asset('js/script.back.js')) }}"></script>
+        <script src="{{ absolute_url(asset('bundles/fosjsrouting/js/router.min.js')) }}"></script>
+        <script src="{{ url('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

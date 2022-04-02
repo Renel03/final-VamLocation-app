@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Voitures - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="wp">
+    <div class="title d-flex align-items-center">
+        <h1 class="flex-grow-1">Voitures</h1>
+        <a href="{{ url('back_cars_add') }}" class="btn btn-primary float-right"><i class="fa fa-plus"></i> Ajouter</a>
+    </div>
+    <form class="form">
+        <table class="table table-striped mb-0">
+            <thead>
+                <tr>
+                    <th width="45px"></th>
+                    <th width="120px">{{ knp_pagination_sortable(pagination, '#', 'c.id') }}</th>
+                    <th width="120px" class="text-center">{{ knp_pagination_sortable(pagination, 'Type', 't.type') }}</th>
+                    <th width="120px" class="text-center">{{ knp_pagination_sortable(pagination, 'N°', 'c.num') }}</th>
+                    <th>{{ knp_pagination_sortable(pagination, 'Info', 'c.trademark') }}</th>
+                    <th width="100px" class="text-center">Verifié</th>
+                    <th width="45px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if pagination.getTotalItemCount() > 0 %}
+                {% for entity in pagination %}
+                <tr>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="del[]" value="{{ entity.id }}"/>
+                            <span></span>
+                        </label>
+                    </td>
+                    <td>#{{ entity.id }}</td>
+                    <td class="text-center">{% if entity.trademark.type == 1 %}Voiture{% elseif entity.trademark.type == 2 %}Moto{% else %}Utilitaire{% endif %}</td>
+                    <td class="text-center">{{ entity.num }}</td>
+                    <td>{{ entity.trademark.name }}{% if entity.model is not null %} {{ entity.model.name }}{% endif %}{% if entity.version is not null %} {{ entity.version.name }}{% endif %}</td>                    </td>
+                    <td class="text-center">{% if entity.isVerified %}<i class="fa fa-check-circle text-success"></i>{% else %}<i class="fa fa-check-circle text-danger"></i>{% endif %}</td>
+                    <td class="text-center"><a href="{{ url('back_cars_edit',{'id': entity.id}) }}"><i class="fa fa-edit"></i></a></td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="7">Aucun véhicule trouvé.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        <div class="navigation text-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+        <div class="pt-20">
+            <button type="submit" class="btn btn-primary" onClick="return confirm('Voulez-vous supprimer la sélection ?');"><i class="fa fa-trash"></i> Supprimer la sélection</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

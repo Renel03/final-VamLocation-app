@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>{% block title %}AlloCar{% endblock %}</title>
+        <link rel="stylesheet" href="{{ absolute_url(asset('dist/css/bootstrap.min.css')) }}"/>
+        <link rel="stylesheet" href="{{ absolute_url(asset('fontawesome/css/all.min.css')) }}"/>
+        <link rel="stylesheet" href="{{ absolute_url(asset('css/animate.min.css')) }}"/>
+        <link rel="stylesheet" href="{{ absolute_url(asset('fonts/proxima/proxima.css')) }}"/>
+        <link rel="stylesheet" href="{{ absolute_url(asset('css/style.css')) }}"/>
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body class="is-sticky">
+        {% set flashes = app.session.flashbag.all() %}
+        {% if flashes | length > 0 %}{% for type, messages in flashes %}{% for message in messages %}<div class="notice notice-{{type}}">{{ message }}</div>{% endfor %}{% endfor %}{% endif %}
+        <div id="wrapper">
+            <header id="header">
+                <div class="wp d-flex align-items-center">
+                    <div class="logo">
+                        <a href="{{ url('page') }}">
+                            <img src="/images/lecomparateurassurance.svg" alt=""/>
+                        </a>
+                    </div>
+                    <span class="flex-grow-1"></span>
+                    <div class="auth d-flex align-items-center">
+                        <ul>
+                            <li><a href="{{ url('page', {'slug': 'faq.html'}) }}"><i class='fa fa-question-circle'></i> Aide</a></li>
+                            <li><a href="{{ url('page', {'slug': 'contact.html'}) }}">Contact</a></li>
+                            <li>
+                                <a href="{{ url('security_login') }}" class="btn btn-gray">Connexion</a>
+                            </li>
+                            <li>
+                                <a href="{{ url('registration_register') }}" class="btn btn-primary">Inscription</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+            <main id="main">
+                {% block body %}{% endblock %}
+            </main>
+            <footer id="footer">
+                <div class="footer-top">
+                    <div class="wp">
+                        <div class="row">
+                            <div class="col-12 col-sm-4 col-md-3">
+                                <h2>AlloCar</h2>
+                                <ul>
+                                    <li><a href="{{ url('page', {'slug': 'a-propos-d-allocar.html'}) }}">À propos d'AlloCar</a></li>
+                                    <li><a href="{{ url('page', {'slug': 'mentions-legales.html'}) }}">Mentions légales</a></li>
+                                    <li><a href="{{ url('page', {'slug': 'contact.html'}) }}">Contact</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-sm-4 col-md-3">
+                                <h2>Plus d'infos</h2>
+                                <ul>
+                                    <li><a href="{{ url('page', {'slug': 'tarifs.html'}) }}">Nos tarifs</a></li>
+                                    <li><a href="{{ url('page', {'slug': 'pros.html'}) }}">Professionnels</a></li>
+                                    <li><a href="{{ url('page', {'slug': 'location-de-voiture.html'}) }}">Location de voiture</a></li>
+                                    <li><a href="{{ url('page', {'slug': 'achat-de-vehicule.html'}) }}">Achat de véhicule</a></li>
+                                    <li><a href="{{ url('page', {'slug': 'vente-de-vehicule.html'}) }}">Vente de véhicule</a></li>
+                                    <li><a href="{{ url('page', {'slug': 'conditions-generales-d-utilisation.html'}) }}">Conditions générales d'utilisation</a></li>
+                                    <li><a href="{{ url('page', {'slug': 'politique-de-confidentialite.html'}) }}">Politique de confidentialité</a></li>
+                                    <li><a href="/blog">Blog</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-sm-4 col-md-3">
+                                <h2>Aide</h2>
+                                <ul>
+                                    <li><a href="{{ url('page', {'slug': 'faq.html'}) }}">FAQ</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-sm-4 col-md-3">
+                                <h2>Nos applications</h2>
+                                <ul>
+                                    <li>
+                                        <ul class="apps">
+                                            <li><a href="" target="_blank"><img src="/images/google-play.png" alt=""/></a></li>
+                                            <li><a href="" target="_blank"><img src="/images/apple-app-store.png" alt=""/></a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class='wp d-flex align-items-center justify-content-between'>
+                        <div class='fb-left'>
+                            &copy; Copyright {{ 'now' | date('Y') }} AlloCar. Tous droits réservés. <br/>Un site web de la société <a href="https://www.softlab.mg" target="_blank">Softlab</a> SARLU.
+                        </div>
+                        <div class='fb-right'>
+                            <ul class="media-social">
+                                <li>Suivez-nous :</li>
+                                <li><a href="" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="" target="_blank"><i class="fab fa-youtube"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    	<script type="text/javascript" src="{{ absolute_url(asset('js/jquery-3.3.1.min.js')) }}"></script>
+        <script type="text/javascript" src="{{ absolute_url(asset('dist/js/bootstrap.min.js')) }}"></script>
+        <script type="text/javascript" src="{{ absolute_url(asset('fontawesome/js/all.min.js')) }}"></script>
+        <script type="text/javascript" src="{{ absolute_url(asset('js/script.js')) }}"></script>
+        <script src="{{ absolute_url(asset('bundles/fosjsrouting/js/router.min.js')) }}"></script>
+        <script src="{{ url('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

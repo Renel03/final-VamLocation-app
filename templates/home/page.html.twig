@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>{% block title %}AlloCar{% endblock %}</title>
+        <link rel="stylesheet" href="{{ absolute_url(asset('dist/css/bootstrap.min.css')) }}"/>
+        <link rel="stylesheet" href="{{ absolute_url(asset('fontawesome/css/all.min.css')) }}"/>
+        <link rel="stylesheet" href="{{ absolute_url(asset('css/animate.min.css')) }}"/>
+        <link rel="stylesheet" href="{{ absolute_url(asset('fonts/proxima/proxima.css')) }}"/>
+        <link rel="stylesheet" href="{{ absolute_url(asset('css/style.css')) }}"/>
+        {{ encore_entry_link_tags('app') }}
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body class="is-sticky">
+        {% set flashes = app.session.flashbag.all() %}
+        {% if flashes | length > 0 %}{% for type, messages in flashes %}{% for message in messages %}<div class="notice notice-{{type}}">{{ message }}</div>{% endfor %}{% endfor %}{% endif %}
+        <div id="wrapper">
+            <div id="root"><div class="loader"></div></div>
+        </div>
+    	<script type="text/javascript" src="{{ absolute_url(asset('js/jquery-3.3.1.min.js')) }}"></script>
+        <script type="text/javascript" src="{{ absolute_url(asset('dist/js/bootstrap.min.js')) }}"></script>
+        <script type="text/javascript" src="{{ absolute_url(asset('fontawesome/js/all.min.js')) }}"></script>
+        <script type="text/javascript" src="{{ absolute_url(asset('js/cookies.js')) }}"></script>
+        <script type="text/javascript" src="{{ absolute_url(asset('js/script.js')) }}"></script>
+        <script src="{{ absolute_url(asset('bundles/fosjsrouting/js/router.min.js')) }}"></script>
+        <script src="{{ url('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+        <script type="text/javascript">
+            window.onscroll = function() {
+                _sticky();
+            };
+            
+            _sticky();
+            
+            function _sticky() {
+                var str = document.querySelector(".sticky");
+                if(str == null)
+                    return ;
+                var body = document.getElementsByTagName("body")[0];
+                if (window.pageYOffset >= 100) {
+                    body.classList.add("is-sticky");
+                } else {
+                    body.classList.remove("is-sticky");
+                }
+            }
+        </script>
+        {% block javascripts %}{% endblock %}
+        {{ encore_entry_script_tags('app') }}
+    </body>
+</html>

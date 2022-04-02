@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% if edit is defined %}Modifer un professionnel{% else %}Ajouter un professionnel{% endif %} - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="wp">
+    <div class="title">
+        <h1>{% if edit is defined %}Modifer un professionnel{% else %}Ajouter un professionnel{% endif %}</h1>
+    </div>
+    {{ form_start(form, {'attr': {'class': 'form'}}) }}
+        <div class="form-error">{{ form_errors(form) }}</div>
+        <h6>Coordonnées</h6>
+        <div class="form-group">
+            {{ form_label(form.lastname) }}
+            {{ form_widget(form.lastname) }}
+            {% if form.lastname.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.lastname) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.firstname) }}
+            {{ form_widget(form.firstname) }}
+            {% if form.firstname.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.firstname) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.phone) }}
+            {{ form_widget(form.phone) }}
+            {% if form.phone.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.phone) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+            {% if form.email.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.email) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.address) }}
+            {{ form_widget(form.address) }}
+            {% if form.address.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.address) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.city) }}
+            {{ form_widget(form.city) }}
+            {% if form.city.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.city) }}
+            </div>
+            {% endif %}
+        </div>
+        {% if edit is defined %}
+        <div class="form-group">
+            {{ form_label(form.plainPassword) }}
+            {{ form_widget(form.plainPassword) }}
+            {% if form.plainPassword.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.plainPassword) }}
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        <div class="form-group">
+            <label>
+                {{ form_widget(form.isActive) }}
+                <span></span>
+                Le compte est activé
+            </label>
+            {% if form.isActive.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.isActive) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="pt-20 text-center">
+            <button type="submit" class="btn btn-primary btn-lg">Enregistrer{% if edit is defined %} les modifications{% else %}{% endif %}</button>
+        </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        elm = jQuery(jQuery('.add-another-collection-widget').attr('data-list-selector'));
+        elm.find('>div').each(function() {
+            addTagFormDeleteLink($(this));
+        });
+        if(elm.children().length == 0){
+            addField(jQuery('.add-another-collection-widget'));
+        }
+
+        jQuery('.add-another-collection-widget').click(function (e) {
+            addField(jQuery(this));
+        });
+
+        function addField(obj)
+        {
+            var list = jQuery(obj.attr('data-list-selector'));
+            var counter = list.data('widget-counter') || list.children().length;
+
+            var newWidget = list.attr('data-prototype');
+            newWidget = newWidget.replace(/__name__/g, counter);
+            counter++;
+            list.data('widget-counter', counter);
+
+            var newElem = jQuery(list.attr('data-widget-tags')).html(newWidget);
+            newElem.appendTo(list);
+
+            addTagFormDeleteLink(newElem);
+        }
+
+        function addTagFormDeleteLink($tag) {
+            var $removeFormButton = $('<button type="button" class="removephoto"></button>');
+            $tag.append($removeFormButton);
+
+            $removeFormButton.on('click', function(e) {
+                $tag.remove();
+            });
+        }
+    });
+</script>
+{% endblock %}

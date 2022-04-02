@@ -1,0 +1,193 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% if edit is defined %}Modifer une voiture{% else %}Ajouter une voiture{% endif %} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style type="text/css">
+    #photo-fields-list .form-group{
+        padding-left:30px;min-height:28px;position:relative
+    }
+    .removephoto{
+        position:absolute;width:28px;height:28px;font-size:18px;line-height:28px;padding:0;top:0;left:0;border:0 none;font-weight:300;cursor:pointer;background-color:transparent
+    }
+    .removephoto:before{
+        position:absolute;content:'';height:1px;width:18px;top:13px;left:4px;background-color:var(--color-default);-webkit-transform:rotateZ(-45deg);transform:rotateZ(-45deg)
+    }
+    .removephoto:after{
+        position:absolute;content:'';height:1px;width:18px;top:13px;left:4px;background-color:var(--color-default);-webkit-transform:rotateZ(45deg);transform:rotateZ(45deg)
+    }
+    .removephoto:hover:before,.removephoto:hover:after{
+        background-color:var(--color-primary)
+    }
+    {# .fields,.newModel,.newTrademark,.moto-field,.car-field{
+        display:none
+    }
+    .moto-field.active,.car-field.active{
+        display:block
+    }
+    .paiments.is_open{
+        display:block
+    }
+    .paiments.is_close{
+        display:none
+    }
+    .trademark,.newTrademark,.newModel,.model{
+        margin-bottom:5px
+    }
+    .sum-paid{
+        padding:10px 15px;background-color:var(--color-white)
+    }
+    .sum-paid span{
+        font-weight:600;font-size:18px
+    } #}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="wp">
+    <div class="title">
+        <h1>{% if edit is defined %}Modifer une voiture{% else %}Ajouter une voiture{% endif %}</h1>
+    </div>
+    {{ form_start(form, {'attr': {'class': 'form'}}) }}
+        <div class="form-error">{{ form_errors(form) }}</div>
+        <div class="form-group">
+            {{ form_label(form.trademark) }}
+            {{ form_widget(form.trademark) }}
+            {% if form.trademark.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.trademark) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.model) }}
+            {{ form_widget(form.model) }}
+            {% if form.model.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.model) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.version) }}
+            {{ form_widget(form.version) }}
+            {% if form.version.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.version) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.nbPlace) }}
+            {{ form_widget(form.nbPlace) }}
+            {% if form.nbPlace.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.nbPlace) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.num) }}
+            {{ form_widget(form.num) }}
+            {% if form.num.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.num) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.file) }}
+            {{ form_widget(form.file) }}
+            {% if form.file.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.file) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label>
+                {{ form_widget(form.isVerified) }}
+                <span></span>
+                Dossier verifié
+            </label>
+            {% if form.isVerified.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.isVerified) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description) }}
+            {% if form.description.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.description) }}
+            </div>
+            {% endif %}
+        </div>
+        <h6 class="pt-10">Photos</h6>
+        <div class="form-group photos">
+            {{ form_label(form.photos) }}
+            {{ form_errors(form.photos) }}
+            <div id="photo-fields-list" data-prototype="{{ form_widget(form.photos.vars.prototype)|e }}" data-widget-tags="{{ '<div class=form-group></div>'|e }}">
+                {% for photo in form.photos %}
+                <div class="form-group">
+                {{ form_errors(photo) }}
+                {{ form_widget(photo) }}
+                </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="add-another-collection-widget" data-list-selector="#photo-fields-list">
+                <i class="fa fa-image"></i> Ajouter
+            </button>
+        </div>
+        <div class="pt-20 text-center">
+            <button type="submit" class="btn btn-primary btn-lg">Enregistrer{% if edit is defined %} les modifications{% else %}{% endif %}</button>
+        </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        elm = jQuery(jQuery('.add-another-collection-widget').attr('data-list-selector'));
+        elm.find('>div').each(function() {
+            addTagFormDeleteLink($(this));
+        });
+        if(elm.children().length == 0){
+            addField(jQuery('.add-another-collection-widget'));
+        }
+
+        jQuery('.add-another-collection-widget').click(function (e) {
+            addField(jQuery(this));
+        });
+
+        function addField(obj)
+        {
+            var list = jQuery(obj.attr('data-list-selector'));
+            var counter = list.data('widget-counter') || list.children().length;
+
+            var newWidget = list.attr('data-prototype');
+            newWidget = newWidget.replace(/__name__/g, counter);
+            counter++;
+            list.data('widget-counter', counter);
+
+            var newElem = jQuery(list.attr('data-widget-tags')).html(newWidget);
+            newElem.appendTo(list);
+
+            addTagFormDeleteLink(newElem);
+        }
+
+        function addTagFormDeleteLink($tag) {
+            var $removeFormButton = $('<button type="button" class="removephoto"></button>');
+            $tag.append($removeFormButton);
+
+            $removeFormButton.on('click', function(e) {
+                $tag.remove();
+            });
+        }
+    });
+</script>
+{% endblock %}

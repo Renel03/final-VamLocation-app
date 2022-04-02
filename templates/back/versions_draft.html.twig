@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% if edit is defined %}Modifer une version{% else %}Ajouter une version{% endif %} - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="wp">
+    <div class="title">
+        <h1>{% if edit is defined %}Modifer une version{% else %}Ajouter une version{% endif %}</h1>
+    </div>
+    {{ form_start(form, {'attr': {'class': 'form'}}) }}
+        <div class="form-error">{{ form_errors(form) }}</div>
+        <div class="form-group">
+            {{ form_label(form.model) }}
+            {{ form_widget(form.model) }}
+            {% if form.model.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.model) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name) }}
+            {% if form.name.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.name) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label>
+                {{ form_widget(form.status) }}
+                <span></span>
+                Verifié
+            </label>
+            {% if form.status.vars.valid == 0 %}
+            <div class="form-error">
+                {{ form_errors(form.status) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="pt-20 text-center">
+            <button type="submit" class="btn btn-primary btn-lg">Enregistrer{% if edit is defined %} les modifications{% else %}{% endif %}</button>
+        </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

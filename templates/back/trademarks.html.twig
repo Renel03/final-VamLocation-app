@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Marques - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="wp">
+    <div class="title d-flex align-items-center">
+        <h1 class="flex-grow-1">Marques</h1>
+        <a href="{{ url('back_trademarks_add') }}" class="btn btn-primary float-right"><i class="fa fa-plus"></i> Ajouter</a>
+    </div>
+    <form class="form">
+        <table class="table table-striped mb-0">
+            <thead>
+                <tr>
+                    <th width="45px"></th>
+                    <th width="120px">{{ knp_pagination_sortable(pagination, '#', 't.id') }}</th>
+                    <th width="120px" class="text-center">{{ knp_pagination_sortable(pagination, 'Type', 't.type') }}</th>
+                    <th>{{ knp_pagination_sortable(pagination, 'Marque', 't.name') }}</th>
+                    <th width="100px" class="text-center">Etat</th>
+                    <th width="45px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if pagination.getTotalItemCount() > 0 %}
+                {% for entity in pagination %}
+                <tr>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="del[]" value="{{ entity.id }}"/>
+                            <span></span>
+                        </label>
+                    </td>
+                    <td>#{{ entity.id }}</td>
+                    <td class="text-center">{% if entity.type == 1 %}Voiture{% elseif entity.type == 2 %}Moto{% else %}Utilitaire{% endif %}</td>
+                    <td>{{ entity.name }}</td>
+                    <td class="text-center">{% if entity.status %}<i class="fa fa-check-circle text-success"></i>{% else %}<i class="fa fa-check-circle text-danger"></i>{% endif %}</td>
+                    <td class="text-center"><a href="{{ url('back_trademarks_edit',{'id': entity.id}) }}"><i class="fa fa-edit"></i></a></td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="6">Aucune marque trouvée.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        <div class="navigation text-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+        <div class="pt-20">
+            <button type="submit" class="btn btn-primary" onClick="return confirm('Voulez-vous supprimer la sélection ?');"><i class="fa fa-trash"></i> Supprimer la sélection</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
