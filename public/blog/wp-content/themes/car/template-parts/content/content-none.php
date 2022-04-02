@@ -1,1 +1,0 @@
-<div class="txt-placeholder text-center">Aucun résultat trouvé</div>
